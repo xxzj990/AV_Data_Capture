@@ -32,6 +32,14 @@ def getActor(text):
     )
     return result
 
+def getActorPhoto(actor):  # //*[@id="star_qdt"]/li/a/img
+    actor = actor.split(',')
+    d = {}
+    for i in actor:
+        if ',' not in i:
+            p = {i: ''}
+            d.update(p)
+    return d
 
 def getStudio(text):
     html = etree.fromstring(text, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
@@ -192,13 +200,14 @@ def main(number):
         # but the hinban on the page is test00012
         # so get the hinban first, and then pass it to following functions
         fanza_hinban = getNum(htmlcode)
+        actor = getActor(htmlcode)
         data = {
             "title": getTitle(htmlcode).strip(getActor(htmlcode)),
             "studio": getStudio(htmlcode),
             "outline": getOutline(htmlcode),
             "runtime": getRuntime(htmlcode),
             "director": getDirector(htmlcode) if "anime" not in chosen_url else "",
-            "actor": getActor(htmlcode) if "anime" not in chosen_url else "",
+            "actor": actor if "anime" not in chosen_url else "",
             "release": getRelease(htmlcode),
             "number": fanza_hinban,
             "cover": getCover(htmlcode, fanza_hinban),
@@ -208,7 +217,7 @@ def main(number):
             "year": getYear(
                 getRelease(htmlcode)
             ),  # str(re.search('\d{4}',getRelease(a)).group()),
-            "actor_photo": "",
+            "actor_photo": getActorPhoto(actor),
             "website": chosen_url,
             "source": "fanza.py",
         }

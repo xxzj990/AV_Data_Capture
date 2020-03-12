@@ -92,9 +92,10 @@ def main(number):
         urls = html.xpath('//*[@id="videos"]/div/div/a/@href')
         ids =html.xpath('//*[@id="videos"]/div/div/a/div[contains(@class, "uid")]/text()')
         correct_url = urls[ids.index(number)]
-        detail_page = get_html('https://javdb.com' + correct_url)
+        detail_page = get_html('https://javdb.com' + correct_url).replace(u'\xa0', u' ')
+        actor = getActor(detail_page)
         dic = {
-            'actor': getActor(detail_page),
+            'actor': str(actor).strip(" [',']").replace('\'', ''),
             'title': getTitle(detail_page),
             'studio': getStudio(detail_page),
             'outline': getOutline(detail_page),
@@ -108,7 +109,7 @@ def main(number):
             'tag': getTag(detail_page),
             'label': getLabel(detail_page),
             'year': getYear(getRelease(detail_page)),  # str(re.search('\d{4}',getRelease(a)).group()),
-            'actor_photo': getActorPhoto(getActor(detail_page)),
+            'actor_photo': getActorPhoto(actor),
             'website': 'https://javdb.com' + correct_url,
             'source': 'javdb.py',
         }

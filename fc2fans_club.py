@@ -20,6 +20,13 @@ def getActor(htmlcode):
         return result
     except:
         return ''
+def getActorPhoto(actor):  # //*[@id="star_qdt"]/li/a/img
+    actor = actor.split('/')
+    d = {}
+    for i in actor:
+        p = {i: ''}
+        d.update(p)
+    return d
 def getStudio(htmlcode): #获取厂商
     html = etree.fromstring(htmlcode,etree.HTMLParser())
     result = str(html.xpath('/html/body/div[2]/div/div[1]/h5[3]/a[1]/text()')).strip(" ['']")
@@ -124,7 +131,7 @@ def main(number):
             'cover':    getCover(htmlcode,number,htmlcode2),
             'imagecut': 0,
             'tag':      getTag(htmlcode),
-            'actor_photo':'',
+            'actor_photo': getActorPhoto(actor),
             'website':  'https://fc2club.com//html/FC2-' + number + '.html',
             'source':'https://fc2club.com//html/FC2-' + number + '.html',
         }
@@ -147,7 +154,7 @@ def main(number):
                 'imagecut': 0,
                 'tag': getTag_fc2com(number),
                 'label': '',
-                'actor_photo': '',
+                'actor_photo': getActorPhoto(actor),
                 'website': 'http://adult.contents.fc2.com/article/' + number + '/',
                 'source': 'http://adult.contents.fc2.com/article/' + number + '/',
             }
